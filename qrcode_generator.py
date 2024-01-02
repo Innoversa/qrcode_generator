@@ -14,22 +14,30 @@ def parse_arguments() -> argparse.Namespace:
             argparse.Namespace: contains all the flags
     """
     parser = argparse.ArgumentParser(
-        prog="QR code generator", description="Generates code"
+        prog="QR code generator",
+        description='Generates code, example use: # python qrcode_generator.py --content "Participant-01"',
     )
     parser.add_argument(
-        "--content", help="write the content to be injected in the QR code"
+        "--content",
+        help="Enter the information to be encoded into the QR code.",
+    )
+    parser.add_argument(
+        "--path",
+        default="qrcode_img/",
+        help="Specify where to save the generated QR code.",
     )
     flags = parser.parse_args()
     return flags
 
 
-def gen_qrcode(qrcode_content: str) -> str:
+def gen_qrcode(qrcode_content: str, save_path: str = "qrcode_img/") -> str:
     """
     gen_qrcode Generates QR code based on the content provided, with annotations of the content0
 
 
     Args:
             qrcode_content (str): The content to be embedded in the QR Code
+            save_path (str, optional): specify where QR Code is saved. Defaults to "qrcode_img/".
 
     Returns:
             str: passing out the input
@@ -43,12 +51,12 @@ def gen_qrcode(qrcode_content: str) -> str:
         "atkinson-hyperlegible/Atkinson-Hyperlegible-Regular-102.otf", 40
     )
     draw.text((12, 0), qrcode_content, font=font)
-    img.save(f"{qrcode_content}.png")
+    img.save(f"{save_path+qrcode_content}.png")
     return qrcode_content
 
 
 if __name__ == "__main__":
-    # python qrcode_generator.py --content "Empatica-3YK3K152PX"
+    # python qrcode_generator.py --content "Participant-01"
     flags = parse_arguments()
-    _ = gen_qrcode(flags.content)
+    _ = gen_qrcode(qrcode_content=flags.content, save_path=flags.path)
     print("done!")
